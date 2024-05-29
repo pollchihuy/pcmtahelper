@@ -3,6 +3,8 @@ package com.juaracoding.pcmtahelper.util;
 import org.opencv.core.Core;
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
+import org.opencv.imgcodecs.Imgcodecs;
+import org.opencv.imgproc.Imgproc;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -236,6 +238,7 @@ public class ManipulateImage {
         }
     }
 
+    /** memberikan watermark ke gambar */
     public static void watermarking(String imgSource, String pathDestination,String textWatermark){
         BufferedImage img = null;
         File f = null;
@@ -271,4 +274,43 @@ public class ManipulateImage {
             System.out.println(e);
         }
     }
+
+    /** mengacak pixeL */
+    //D:\download-automation\gambar-180-sepia.png
+    public static void randomPixel(String imgSource){
+        int width = 640, height = 320;
+        BufferedImage img = null;
+        img = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+
+        File f = null;
+        for (int y = 0; y < height; y++)
+        {
+            for (int x = 0; x < width; x++)
+            {
+                // generating values less than 256
+                int a = (int)(Math.random()*256);
+                int r = (int)(Math.random()*256);
+                int g = (int)(Math.random()*256);
+                int b = (int)(Math.random()*256);
+
+                //pixel
+                int p = (a<<24) | (r<<16) | (g<<8) | b;
+
+                img.setRGB(x, y, p);
+            }
+        }
+
+        // write image
+        try
+        {
+            f = new File(imgSource);
+            ImageIO.write(img, "png", f);
+        }
+        catch(IOException e)
+        {
+            System.out.println("Error: " + e);
+        }
+    }
+
+
 }

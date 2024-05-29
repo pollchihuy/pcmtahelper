@@ -1,25 +1,26 @@
 package com.juaracoding.pcmtahelper.util;
 
-import org.opencv.core.Core;
-import org.opencv.core.CvType;
-import org.opencv.core.Mat;
-import org.opencv.core.Point;
+import org.opencv.core.*;
+import org.opencv.features2d.*;
 import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
+import org.opencv.video.Video;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferByte;
 import java.io.File;
-import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 
 public class OpenCVFunction {
 
     /**
      * Open CV Libaray
      */
-    private static void loadLibraries() {
+    public static void loadLibraries() {
 
         try {
             InputStream in = null;
@@ -101,6 +102,16 @@ public class OpenCVFunction {
         }catch (Exception e){
             System.out.println(e.getMessage());
         }
+    }
+
+    /** untuk mengcompress image */
+    public static void compressImage(String imgSource,String pathDestination){
+        loadLibraries();
+        String image_location = imgSource;
+        Mat src = Imgcodecs.imread(image_location);
+        Mat dst = new Mat();
+        Imgproc.resize(src, dst, new Size(0, 0), 0.1, 0.1, Imgproc.INTER_AREA);
+        Imgcodecs.imwrite(pathDestination, dst);
     }
 
 
