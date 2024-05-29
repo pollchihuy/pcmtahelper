@@ -1,0 +1,5 @@
+--command jar untuk menjalankan API Testing Restasure
+java -DDB_USER=sa -DDB_PWD=eb9673bf934fa0aa7958149bbc3b9a7d -DDDL_AUTO=create-drop -DSHOW_SQL=false -DSVR_PORT=8085 -DDB_URL=jdbc:h2:C:/data/sqa -DPATH_GEN_PDF=C:/template-report/ -jar paulpaul.jar
+
+--command jar untuk menjalankan API Testing Restasure
+java -DDB_HOST=localhost -DDB_PWD=eb9673bf934fa0aa7958149bbc3b9a7d -DDB_URL=jdbc:h2:C:/data/sqa -DDB_USER=sa -DDDL_AUTO=create-drop -DPATH_GEN_PDF=C:/template-report/ -DSHOW_SQL=false -DSVR_PORT=8080 -jar paulpaul.jar
