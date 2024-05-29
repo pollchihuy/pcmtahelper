@@ -15,7 +15,6 @@ public class ImageComparassion {
 
     public static Double calculateDifferences(String imgSource,int intSource,String imgToCompare,int intImageToCompare){
         OpenCVFunction.loadLibraries();
-
 //        Mat img1 = Imgcodecs.imread(imgSource, Imgcodecs.IMWRITE_PNG_COMPRESSION);
 //        Mat img2 = Imgcodecs.imread(imgToCompare, Imgcodecs.IMREAD_ANYCOLOR);
         /** compress = 16, abu-abu = 1, berwarna = 1, full warna = 4*/
@@ -56,15 +55,13 @@ public class ImageComparassion {
         MatOfDMatch goodMatches = new MatOfDMatch();
         goodMatches.fromList(listOfGoodMatches);
 
-
         Mat imgMatches = new Mat();
         Features2d.drawMatches(img1, keypoints1, img2, keypoints2, goodMatches, imgMatches, Scalar.all(-1),
                 Scalar.all(-1), new MatOfByte(), Features2d.DrawMatchesFlags_NOT_DRAW_SINGLE_POINTS);
 
         /** uncomment ini untuk melihat visualisasi nya */
-//        HighGui.imshow("Displayed", imgMatches);
-//        HighGui.waitKey(0);
+        HighGui.imshow("Displayed", imgMatches);
+        HighGui.waitKey(0);
         return Double.valueOf(listOfGoodMatches.size());
-
     }
 }

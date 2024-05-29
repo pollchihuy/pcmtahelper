@@ -4,7 +4,9 @@ import com.juaracoding.pcmtahelper.connection.Constants;
 import net.sourceforge.tess4j.Tesseract;
 import net.sourceforge.tess4j.TesseractException;
 import org.apache.commons.io.FileUtils;
-import org.openqa.selenium.*;
+import org.openqa.selenium.OutputType;
+import org.openqa.selenium.TakesScreenshot;
+import org.openqa.selenium.WebDriver;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -14,8 +16,6 @@ import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Iterator;
-import java.util.List;
 
 public class GlobalFunction {
 
@@ -34,18 +34,18 @@ public class GlobalFunction {
         return destination;
     }
 
-    public static void dropDownlist(WebDriver driver, String strXpath){
-        List<WebElement> d =driver.findElements(By.xpath(strXpath));
-        Iterator<WebElement> itr = d.iterator();
-
-        int intIter = 1;
-        String value = "";
-        while (itr.hasNext()){
-            WebElement element = itr.next();
-            value = element.getText();
-            System.out.println("Element get Text : "+value);
-        }
-    }
+//    public static void dropDownlist(WebDriver driver, String strXpath){
+//        List<WebElement> d =driver.findElements(By.xpath(strXpath));
+//        Iterator<WebElement> itr = d.iterator();
+//
+//        int intIter = 1;
+//        String value = "";
+//        while (itr.hasNext()){
+//            WebElement element = itr.next();
+//            value = element.getText();
+//            System.out.println("Element get Text : "+value);
+//        }
+//    }
 
     /** ini untuk konfigurasi di seluruh step */
     public static  void delay(int intDetik){
@@ -67,6 +67,7 @@ public class GlobalFunction {
         }
     }
 
+    /** Fungsional OCR mengubah image yang berisi text menjadi String */
     public static String generateTextOCR(String pathFile){
         String result = "";
         try {
@@ -81,15 +82,20 @@ public class GlobalFunction {
         } catch (TesseractException e) {
             System.out.println(e.getMessage());
         }
-
         return result;
     }
+
+    /** melakukan pengecekan apakah folder telah dibuat atau belum, jika belum otomatis akan terbuat */
     public static void checkAndCreateDirectory(String path){
         File theDir = new File(path);
         if (!theDir.exists()){
             theDir.mkdirs();
         }
     }
+
+    /** melakukan download file dari url
+        Parameter targetDirectory harus berbentuk Path + penamaan file
+     */
     public static void downloadImage(String sourceUrl, String targetDirectory)
     {
         try {

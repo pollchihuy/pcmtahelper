@@ -134,7 +134,6 @@ public class SiloamUploadPage {
 
     public SiloamUploadPage() {
         WebDriverManager.firefoxdriver().setup();
-//        WebDriver driver = new FirefoxDriver();
         driver = new ChromeDriver();
         PageFactory.initElements(driver,this);
     }
@@ -142,7 +141,7 @@ public class SiloamUploadPage {
     public void executeThis() {
         int intDelay = 1;
         String baseUrl = "https://dev.ptdika.com/staging.siloam/panel/login/";
-//        String baseUrl = "https://dev.ptdika.com/staging.siloam/panel/login/";
+//        String baseUrl = "https://dev.ptdika.com/siloam/panel/login/";
         driver.get(baseUrl);
         driver.manage().window().maximize();
 
@@ -253,11 +252,11 @@ public class SiloamUploadPage {
 
         delay(intDelay);
 
-//        dateBefore.sendKeys(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
-        dateBefore.sendKeys("2024-05-28");
+        dateBefore.sendKeys(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
+//        dateBefore.sendKeys("2024-05-28");
         delay(intDelay);
-//        dateAfter.sendKeys(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
-        dateAfter.sendKeys("2024-05-28");
+        dateAfter.sendKeys(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
+//        dateAfter.sendKeys("2024-05-28");
         delay(intDelay);
         btnFilter.click();
 
@@ -277,7 +276,8 @@ public class SiloamUploadPage {
                 if(j==4){
                     noBpjs=cells.get(j).getText();
 
-                    if(noBpjs.equals("2454715683724")){
+//                    if(noBpjs.equals("2454715683724")){
+                    if(noBpjs.equals(strNoBPJS)){
                         System.out.println("NO BPJS : "+noBpjs);
                         isValid=true;
                     }
@@ -344,7 +344,7 @@ public class SiloamUploadPage {
 
     }
 
-    public void delay(int intDetik){
+    private void delay(int intDetik){
         if(Constants.GLOB_PARAM_DELAY.equalsIgnoreCase("y")){
             try {
                 Thread.sleep(intDetik*1000);

@@ -52,7 +52,7 @@ public class OpenCVFunction {
         Mat src = Imgcodecs.imread(file);
 
         Mat dst = new Mat();
-        double angle = 180;
+        double angle = rotateAngle;
 
         if (angle == 90 || angle == -270) {
             Core.rotate(src, dst, Core.ROTATE_90_CLOCKWISE);
