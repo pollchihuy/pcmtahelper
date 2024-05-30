@@ -111,6 +111,7 @@ public class OpenCVFunction {
         Mat src = Imgcodecs.imread(image_location);
         Mat dst = new Mat();
         Imgproc.resize(src, dst, new Size(0, 0), 0.1, 0.1, Imgproc.INTER_AREA);
+//        Imgproc.resize(src, dst, new Size(367, 158), 0.1, 0.1, Imgproc.INTER_AREA);
         Imgcodecs.imwrite(pathDestination, dst);
     }
 

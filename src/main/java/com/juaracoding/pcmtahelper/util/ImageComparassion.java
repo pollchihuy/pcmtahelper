@@ -59,9 +59,9 @@ public class ImageComparassion {
         Features2d.drawMatches(img1, keypoints1, img2, keypoints2, goodMatches, imgMatches, Scalar.all(-1),
                 Scalar.all(-1), new MatOfByte(), Features2d.DrawMatchesFlags_NOT_DRAW_SINGLE_POINTS);
 
-        /** uncomment ini untuk melihat visualisasi nya */
-        HighGui.imshow("Displayed", imgMatches);
-        HighGui.waitKey(0);
+        /** uncomment ini untuk melihat visualisasi nya ini di comment kalau sudah mau deploy testing */
+//        HighGui.imshow("Displayed", imgMatches);
+//        HighGui.waitKey(0);
         return Double.valueOf(listOfGoodMatches.size());
     }
 }

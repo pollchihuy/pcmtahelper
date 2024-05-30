@@ -4,7 +4,6 @@ import com.juaracoding.pcmtahelper.connection.Constants;
 import com.juaracoding.pcmtahelper.util.DataGenerator;
 import com.juaracoding.pcmtahelper.util.GlobalFunction;
 import io.github.bonigarcia.wdm.WebDriverManager;
-import net.sourceforge.tess4j.Tesseract;
 import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.FindBy;
@@ -12,7 +11,6 @@ import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.time.Duration;
 import java.util.Date;
@@ -116,16 +114,16 @@ public class SiloamUploadPage {
     WebElement btnFilter;
 
     @FindBy(xpath = "//input[@name='uploadfile']")
-    WebElement btnFileOneOCR;
+    WebElement btnFileOneOpenCV;
 
     @FindBy(xpath = "//input[@name='uploadfile2']")
-    WebElement btnFileTwoOCR;
+    WebElement btnFileTwoOpenCV;
 
     @FindBy(xpath = "//input[@value='OK']")
-    WebElement btnConfirmOCR;
+    WebElement btnConfirmOpenCVOnline;
 
     @FindBy(xpath = "//*[@id=\"content\"]/span")
-    WebElement resultOCR;
+    WebElement resultOpenCV;
 
     @FindBy(xpath = "//b[normalize-space()='Go back']")
     WebElement btnBack;
@@ -152,14 +150,13 @@ public class SiloamUploadPage {
 
         /** masuk menu homepage */
         delay(intDelay);
-
         linkMenuInput.click();
 
         /** masuk form input data */
         delay(intDelay);
-
         DataGenerator dataGenerator = new DataGenerator();
         Random r = new Random();
+
         fieldNama.sendKeys(dataGenerator.dataNamaLengkap());
         delay(intDelay);
         /** untuk pencarian nantinya */
@@ -188,8 +185,8 @@ public class SiloamUploadPage {
 
         String winHandleBefore = driver.getWindowHandle();
         String currentUrl = driver.getCurrentUrl();
-        System.out.println("Windows Handle Before "+winHandleBefore);
-        System.out.println("Current URL "+currentUrl);
+//        System.out.println("Windows Handle Before "+winHandleBefore);
+//        System.out.println("Current URL "+currentUrl);
 
 
         delay(intDelay);
@@ -251,8 +248,7 @@ public class SiloamUploadPage {
         viewAndReport.click();
 
         delay(intDelay);
-
-        dateBefore.sendKeys(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
+        dateBefore.sendKeys(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));//2024-05-29
 //        dateBefore.sendKeys("2024-05-28");
         delay(intDelay);
         dateAfter.sendKeys(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
@@ -261,8 +257,8 @@ public class SiloamUploadPage {
         btnFilter.click();
 
         /** locator xpath mutlak untuk setiap table pure html */
-        By dataRowsLocator = By.xpath(".//tr[not(position()=1)]");
-        List<WebElement> allRows = driver.findElements(dataRowsLocator);
+//        By dataRowsLocator = By.xpath(".//tr[not(position()=1)]");
+        List<WebElement> allRows = driver.findElements(By.xpath(".//tr[not(position()=1)]"));
         System.out.println(allRows.size());
         String noBpjs="";
         String strLinkFaskesAwal = "";
@@ -283,9 +279,7 @@ public class SiloamUploadPage {
                     }
                 }
                 if(isValid && j==6){
-//                    WebElement linkFaskesAwal = cells.get(i).findElement(By.tagName("a"));
                     strLinkFaskesAwal = cells.get(j).findElement(By.xpath(".//a")).getAttribute("href");
-//                    strLinkFaskesAwal = linkFaskesAwal.getAttribute("href");
                 }
                 if(isValid && j==7){
                     strLinkFaskesTujuan = cells.get(j).findElement(By.xpath(".//a")).getAttribute("href");
@@ -298,6 +292,10 @@ public class SiloamUploadPage {
                 break;
             }
         }
+
+        // strLinkFaskesAwal --> https://dev.ptdika.com/staging.siloam/upload/dokumen/1554/1554_Before_16f97c5b3736a8e0142b5e2456c4ccbd.png
+        // strLinkFaskesTujuan --> https://dev.ptdika.com/staging.siloam/upload/dokumen/1554/1554_After_cc536c6cff0153c8aa287d6a42680eb2.png
+        // strLinkPDF --> https://dev.ptdika.com/staging.siloam/upload/dokumen/1554/1554_agreement_1716985744.pdf
 
         System.out.println("Link Faskes Awal : "+strLinkFaskesAwal);
         System.out.println("Link Faskes Tujuan : "+strLinkFaskesTujuan);
@@ -316,31 +314,32 @@ public class SiloamUploadPage {
         /** Open CV compare yg di download dengan yang di upload */
         driver.get("https://www.imgonline.com.ua/eng/similarity-percent.php");
 
-        /** OCR Untuk Compare Gambar Faskes Awal */
+        /** Open CV Untuk Compare Gambar Faskes Awal */
         delay(intDelay);
-        btnFileOneOCR.sendKeys(System.getProperty("user.dir")+"\\data\\foto-faskes-awal-1.png");
+        btnFileOneOpenCV.sendKeys(System.getProperty("user.dir")+"\\data\\foto-faskes-awal-1.png");
         delay(intDelay);
-        btnFileTwoOCR.sendKeys(pathRootDownload+fileDownloadFaskesAwal);
+        btnFileTwoOpenCV.sendKeys(pathRootDownload+fileDownloadFaskesAwal);
         delay(intDelay);
-        btnConfirmOCR.click();
-        System.out.println("Result OCR Gambar Faskes Awal "+resultOCR.getText());
+        btnConfirmOpenCVOnline.click();
+        System.out.println("Result OpenCV Gambar Faskes Awal "+ resultOpenCV.getText());
 
         delay(intDelay);
         btnBack.click();
 
         delay(intDelay);
-        /** OCR Untuk Compare Gambar Faskes Tujuan */
+        /** Open CV Untuk Compare Gambar Faskes Tujuan */
         delay(intDelay);
-        btnFileOneOCR.sendKeys(System.getProperty("user.dir")+"\\data\\foto-faskes-tujuan-1.png");
+        btnFileOneOpenCV.sendKeys(System.getProperty("user.dir")+"\\data\\foto-faskes-tujuan-1.png");
         delay(intDelay);
-        btnFileTwoOCR.sendKeys(pathRootDownload+fileDownloadFaskesTujuan);
+        btnFileTwoOpenCV.sendKeys(pathRootDownload+fileDownloadFaskesTujuan);
         delay(intDelay);
-        btnConfirmOCR.click();
-        System.out.println("Result OCR Gambar Faskes Tujuan "+resultOCR.getText());
+        btnConfirmOpenCVOnline.click();
+        System.out.println("Result OCR Gambar Faskes Tujuan "+ resultOpenCV.getText());
 
 
         /** OCR Baca data dari PDF */
         System.out.println(GlobalFunction.generateTextOCR(pathRootDownload+fileDownloadPDF));
+
 
     }
 

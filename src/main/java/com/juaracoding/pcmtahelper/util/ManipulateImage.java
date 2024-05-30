@@ -38,9 +38,12 @@ public class ManipulateImage {
         int height1 = imgA.getHeight();
         int height2 = imgB.getHeight();
 
-        if ((width1 != width2) || (height1 != height2))
-
+        if ((width1 != width2) || (height1 != height2)){
             System.out.println("Error: PixeL / Dimensi Image Tidak Sama !!");
+            return 100.0;
+        }
+
+
         else {
             long difference = 0;
             for (int y = 0; y < height1; y++) {

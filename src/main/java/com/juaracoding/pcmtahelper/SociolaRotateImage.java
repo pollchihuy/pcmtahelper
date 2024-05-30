@@ -5,6 +5,7 @@ import com.juaracoding.pcmtahelper.util.GlobalFunction;
 import com.juaracoding.pcmtahelper.util.ImageComparassion;
 import com.juaracoding.pcmtahelper.util.OpenCVFunction;
 import io.github.bonigarcia.wdm.WebDriverManager;
+import org.apache.commons.compress.archivers.cpio.CpioArchiveEntry;
 import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.FindBy;
@@ -15,6 +16,8 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import java.text.SimpleDateFormat;
 import java.time.Duration;
 import java.util.Date;
+import java.util.Iterator;
+import java.util.Set;
 
 public class SociolaRotateImage {
 
@@ -41,7 +44,9 @@ public class SociolaRotateImage {
     @FindBy(xpath = "//i[@class='fa fa-eye']")
     private WebElement btnEditRecords;
 
-    @FindBy(xpath = "//img[@src = 'https://dev.ptdika.com/staging.sociola/upload/Foto_Struk_EDC_2024-05-26_1716727424.png']")
+//    /html/body/div[1]/div[1]/section[2]/div[1]/form/div/div[2]/div/div[2]/div[1]/img
+//    @FindBy(xpath = "//img[@src = 'https://dev.ptdika.com/staging.sociola/upload/Foto_Struk_EDC_2024-05-26_1716727424.png']")
+    @FindBy(xpath = "//*[@id=\"div-Foto_Struk_EDC\"]/img")
     private WebElement panelGambarSatu;
 
     @FindBy(xpath = "//*[@id=\"previewing_edc\"]")
@@ -56,6 +61,21 @@ public class SociolaRotateImage {
     @FindBy(xpath = "//div[@id='div-Foto_Struk_EDC']//a[3]")
     private WebElement btnRotate270;
 
+    @FindBy(xpath = "//input[@name='uploadfile']")
+    WebElement btnFileOneOpenCV;
+
+    @FindBy(xpath = "//input[@name='uploadfile2']")
+    WebElement btnFileTwoOpenCV;
+
+    @FindBy(xpath = "//input[@value='OK']")
+    WebElement btnConfirmOpenCVOnline;
+
+    @FindBy(xpath = "//*[@id=\"content\"]/span")
+    WebElement resultOpenCV;
+
+    @FindBy(xpath = "//b[normalize-space()='Go back']")
+    WebElement btnBack;
+
 
     public SociolaRotateImage() {
         WebDriverManager.firefoxdriver().setup();
@@ -65,7 +85,7 @@ public class SociolaRotateImage {
 
     public void eksekusi(){
 
-        String strSociId = "SOCIOLLASBY0136";
+        String strSociId = "SOCIOLLASBY0132";
         int intDelay = 1;
         String baseUrl = "https://dev.ptdika.com/staging.sociola/login";
 //        String baseUrl = "https://dev.ptdika.com/sociola/login";
@@ -88,27 +108,47 @@ public class SociolaRotateImage {
 
         btnEditRecords.click();
         delay(intDelay);
-        btnRotate180.click();
-//        new WebDriverWait(driver, Duration.ofSeconds(Constants.TIMEOUT_DELAY))
-//            .until(ExpectedConditions.elementToBeClickable(btnRotate180)).click();
-//        ((JavascriptExecutor)driver).executeScript("return arguments[0].click();",btnRotate180);
-//        String linkGambarPanel1 = new WebDriverWait(driver, Duration.ofSeconds(Constants.TIMEOUT_DELAY))
-//                .until(ExpectedConditions.visibilityOf(panelGambarSatu)).getAttribute("src");
-//        String linkGambarPanel1=panelGambarSatu.getAttribute("src");
-        delay(intDelay);
-        String linkGambarPanel1=panelGambarSatu.findElement(By.xpath(".//img")).getAttribute("src");
-        System.out.println("Link Panel : "+linkGambarPanel1);
 
-        String pathRootDownload = "D:\\download-automation";
-        String fileDownloadRotate180 = "\\"+new SimpleDateFormat("ddmmyyyyHHMMssSSS").format(new Date())+"_gambar-DL-rotate-180.jpg";
-        GlobalFunction.downloadImage(linkGambarPanel1,pathRootDownload+fileDownloadRotate180);
+        String parentWindow = driver.getWindowHandle();
+        Set<String> allWindowHandles = driver.getWindowHandles();
+        Iterator<String> i1 = allWindowHandles.iterator();
+        while (i1.hasNext()){
 
-        /** gambar untuk compare */
-        String pathGambarSumber = System.getProperty("user.dir")+"\\data\\gambar-awal.png";
-        String pathGambarDestiny = pathRootDownload+"\\gambar-rotate-180.png";
-        OpenCVFunction.rotateImage(pathGambarSumber,pathRootDownload+"\\",180);
+            String childWindow = i1.next();
+            if(!parentWindow.equals(childWindow)){
+                driver.switchTo().window(childWindow);
+                delay(intDelay);
+                btnRotate180.click();
+                delay(intDelay);
+                String linkGambarPanel1=panelGambarSatu.getAttribute("src");
+                System.out.println("SOURCE -> "+linkGambarPanel1);
 
-        ImageComparassion.calculateDifferences(pathRootDownload+fileDownloadRotate180,1,pathGambarDestiny,1);
+                String pathRootDownload = "D:\\download-automation";
+                String fileDownloadRotate180 = "\\"+new SimpleDateFormat("ddmmyyyyHHMMssSSS").format(new Date())+"_gambar-DL-rotate-180.jpg";
+                GlobalFunction.downloadImage(linkGambarPanel1,pathRootDownload+fileDownloadRotate180);
+
+                /** gambar untuk compare */
+                String pathGambarSumber = System.getProperty("user.dir")+"\\data\\gambar-awal.png";
+                String pathGambarDestiny = pathRootDownload+"\\gambar-ambil-rotate-180.png";
+                OpenCVFunction.rotateImage(pathGambarSumber,pathGambarDestiny,180);
+
+//                ImageComparassion.calculateDifferences(pathRootDownload+fileDownloadRotate180,1,pathGambarDestiny,1);
+
+                /** Open CV compare yg di download dengan yang di upload */
+                driver.get("https://www.imgonline.com.ua/eng/similarity-percent.php");
+
+                /** Open CV Untuk Compare Gambar Faskes Awal */
+                delay(intDelay);
+                btnFileOneOpenCV.sendKeys(System.getProperty("user.dir")+"\\data\\foto-faskes-awal-1.png");
+                delay(intDelay);
+                btnFileTwoOpenCV.sendKeys(pathRootDownload+fileDownloadRotate180);
+                ((JavascriptExecutor)driver).executeScript("window.scrollBy(0,document.body.scrollHeight)");
+                delay(intDelay);
+                btnConfirmOpenCVOnline.click();
+                System.out.println("Compare Rotate 180 "+ resultOpenCV.getText());
+            }
+
+        }
     }
 
     private void delay(int intDetik){
