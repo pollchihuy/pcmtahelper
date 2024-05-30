@@ -8,6 +8,7 @@ import io.github.bonigarcia.wdm.WebDriverManager;
 import org.apache.commons.compress.archivers.cpio.CpioArchiveEntry;
 import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -79,7 +80,7 @@ public class SociolaRotateImage {
 
     public SociolaRotateImage() {
         WebDriverManager.firefoxdriver().setup();
-        driver = new ChromeDriver();
+        driver = new FirefoxDriver();
         PageFactory.initElements(driver,this);
     }
 
@@ -110,11 +111,14 @@ public class SociolaRotateImage {
         delay(intDelay);
 
         String parentWindow = driver.getWindowHandle();
+        System.out.println(" Windows Pertama / Parent : " +parentWindow);
         Set<String> allWindowHandles = driver.getWindowHandles();
         Iterator<String> i1 = allWindowHandles.iterator();
+        String childWindow = "";
         while (i1.hasNext()){
+            childWindow = i1.next();
 
-            String childWindow = i1.next();
+            System.out.println(" Windows Baru / Child : " +childWindow);
             if(!parentWindow.equals(childWindow)){
                 driver.switchTo().window(childWindow);
                 delay(intDelay);
@@ -128,8 +132,8 @@ public class SociolaRotateImage {
                 GlobalFunction.downloadImage(linkGambarPanel1,pathRootDownload+fileDownloadRotate180);
 
                 /** gambar untuk compare */
-                String pathGambarSumber = System.getProperty("user.dir")+"\\data\\gambar-awal.png";
-                String pathGambarDestiny = pathRootDownload+"\\gambar-ambil-rotate-180.png";
+                String pathGambarSumber = System.getProperty("user.dir")+"\\data\\Struk-Awal.jpg";
+                String pathGambarDestiny = pathRootDownload+"\\Struk-Awal-Rotate-180.jpg";
                 OpenCVFunction.rotateImage(pathGambarSumber,pathGambarDestiny,180);
 
 //                ImageComparassion.calculateDifferences(pathRootDownload+fileDownloadRotate180,1,pathGambarDestiny,1);
@@ -139,7 +143,7 @@ public class SociolaRotateImage {
 
                 /** Open CV Untuk Compare Gambar Faskes Awal */
                 delay(intDelay);
-                btnFileOneOpenCV.sendKeys(System.getProperty("user.dir")+"\\data\\foto-faskes-awal-1.png");
+                btnFileOneOpenCV.sendKeys(pathGambarDestiny);
                 delay(intDelay);
                 btnFileTwoOpenCV.sendKeys(pathRootDownload+fileDownloadRotate180);
                 ((JavascriptExecutor)driver).executeScript("window.scrollBy(0,document.body.scrollHeight)");

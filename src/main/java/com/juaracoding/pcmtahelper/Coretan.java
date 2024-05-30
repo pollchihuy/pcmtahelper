@@ -1,5 +1,7 @@
 package com.juaracoding.pcmtahelper;
 
+import org.junit.Assert;
+
 public class Coretan {
 
     public static void main(String[] args) {
@@ -33,6 +35,7 @@ public class Coretan {
                 "FALL}\n" +
                 "\n" +
                 "BUDI IDRIS";
-        System.out.println(strBlaBlaBla.contains("BUDI IDRIS") && strBlaBlaBla.contains("9525300034551324") && strBlaBlaBla.contains("Apt. 601 JI. Gajahmada No.61, Rokan Hulu, GA 01493"));
+        Boolean isValid = strBlaBlaBla.contains("BUDI IDRIS") && strBlaBlaBla.contains("9525300034551324") && strBlaBlaBla.contains("Apt. 601 JI. Gajahmada No.61, Rokan Hulu, GA 01493") && strBlaBlaBla.contains("9440906124606");
+        System.out.println(isValid);
     }
 }

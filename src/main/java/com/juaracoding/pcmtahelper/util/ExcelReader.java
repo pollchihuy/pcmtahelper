@@ -1,7 +1,9 @@
 package com.juaracoding.pcmtahelper.util;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.DataFormatter;
 import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import java.io.BufferedInputStream;
@@ -13,9 +15,9 @@ import java.util.Iterator;
 public class ExcelReader {
 
 	/** File excel yang akan dijadikan Object **/
-	private XSSFWorkbook wBook ;
+	private Workbook wBook ;
 	/** Sheet yang akan diproses **/
-	private XSSFSheet sheet ;
+	private Sheet sheet ;
 	/** Variabel untuk menampung data di dalam cell pada file excel*/
 	private String values ;
 
@@ -38,9 +40,13 @@ public class ExcelReader {
 			/** heavy step */
 			excelFile = new FileInputStream(new File(excelPath));
 			inputBuff = new BufferedInputStream(excelFile);
-			wBook = new XSSFWorkbook(inputBuff);/**/
-			sheet = wBook.getSheet(sheetName);
-//			System.out.println(1/0);
+			if(excelPath.endsWith("xlsx")){
+				wBook = new XSSFWorkbook(inputBuff);/**/
+				sheet = wBook.getSheet(sheetName);
+			}else {
+				wBook = new HSSFWorkbook(inputBuff);/**/
+				sheet = wBook.getSheet(sheetName);
+			}
 			getRowCount();/** Memasukkan informasi jumlah baris ke dalam variabel intRowCount*/
 			getColCount();/** Memasukkan informasi jumlah kolom ke dalam variabel intColCount*/
 			setData();/*SET ALL DATA*/
@@ -135,6 +141,12 @@ public class ExcelReader {
 	{
 		intRowCount = sheet.getPhysicalNumberOfRows();
 		return intRowCount;
+	}
+
+	/**count baris tanpa header */
+	public int getRowCountWH()
+	{
+		return arrWithoutHeader.length;
 	}
 
 	/**

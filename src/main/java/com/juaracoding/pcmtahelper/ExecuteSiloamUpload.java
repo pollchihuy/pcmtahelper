@@ -6,7 +6,10 @@ public class ExecuteSiloamUpload {
 //        SiloamUploadPage siloamUploadPage = new SiloamUploadPage();
 //        siloamUploadPage.executeThis();
 
-        SociolaRotateImage rotateImage = new SociolaRotateImage();
-        rotateImage.eksekusi();
+//        SociolaRotateImage rotateImage = new SociolaRotateImage();
+//        rotateImage.eksekusi();
+
+        SociolaReportValidation sociolaReportValidation = new SociolaReportValidation();
+        sociolaReportValidation.eksekusi();
     }
 }

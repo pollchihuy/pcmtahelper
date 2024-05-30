@@ -4,6 +4,11 @@ import com.juaracoding.pcmtahelper.connection.Constants;
 import net.sourceforge.tess4j.Tesseract;
 import net.sourceforge.tess4j.TesseractException;
 import org.apache.commons.io.FileUtils;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.jsoup.nodes.Document;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
@@ -16,6 +21,8 @@ import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 public class GlobalFunction {
 
@@ -108,6 +115,49 @@ public class GlobalFunction {
             rbc.close();
         } catch (IOException e) {
             System.out.println(e.getMessage());
+        }
+    }
+
+    public static void deleteFile(String pathFile){
+        File myObj = new File(pathFile);
+        if (myObj.delete()) {
+            System.out.println("Deleted the file: " + myObj.getName());
+        } else {
+            System.out.println("Failed to delete the file.");
+        }
+    }
+
+    /** dari file HTML ke file excel dengan ekstensi XLSX */
+    public static void htmlToExcelXLSX(String pathFile,String sheetName){
+        String pathOutPut = pathFile+"x";
+        JsoupTableParser jsoParser = new JsoupTableParser();
+        Document doc = jsoParser.loadFromFile(pathFile);
+        List<Map<String, String>> tableData = jsoParser.parseTable(doc, 0);
+        GlobalFunction.deleteFile(pathOutPut);
+        try {
+            XSSFWorkbook xwork = new XSSFWorkbook();
+            XSSFSheet xsheet = xwork.createSheet(sheetName);
+            XSSFRow xrow  = null;
+            int rowid =0;
+            int colCount =0;
+            for (int i = 0; i < tableData.size(); i++) {
+                Cell cell;
+                xrow = xsheet.createRow(i);
+                colCount =0;
+                for (Map.Entry<String,String> entry : tableData.get(i).entrySet()) {
+                    cell = xrow.createCell(colCount);
+                    cell.setCellValue(entry.getValue());
+                    colCount++;
+                }
+            }
+
+            FileOutputStream fout = new FileOutputStream(new File(pathOutPut));
+            xwork.write(fout);
+            fout.close();
+        }
+
+        catch (Exception e) {
+            e.getMessage();
         }
     }
 }
