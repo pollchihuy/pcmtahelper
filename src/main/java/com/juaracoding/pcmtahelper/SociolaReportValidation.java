@@ -12,12 +12,9 @@ import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.Select;
 
 public class SociolaReportValidation {
-
     private WebDriver driver;
-
     @FindBy(xpath = "//input[@placeholder='Username']")
     private WebElement fieldUsername;
-
     @FindBy(xpath = "//input[@placeholder='Password']")
     private WebElement fieldPassword;
 

@@ -9,6 +9,7 @@ import java.util.regex.Pattern;
 
 public class DataGenerator {
     private Faker faker = new Faker(new Locale("in_ID","ID"));
+//    private Faker faker = new Faker(new Locale("en_US","US"));
     private boolean isValid = false;
     private Matcher matcher = null;
     private int intLoop = 0;
@@ -166,6 +167,14 @@ public class DataGenerator {
         intLoop = 0;
         String namaKota   = "";
         namaKota = faker.address().cityName();
+        return namaKota;
+    }
+
+    public String dataText() {
+        isValid = false;
+        intLoop = 0;
+        String namaKota   = "";
+        namaKota = faker.food().ingredient();
         return namaKota;
     }
 

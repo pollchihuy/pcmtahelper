@@ -21,12 +21,9 @@ import java.util.Iterator;
 import java.util.Set;
 
 public class SociolaRotateImage {
-
     private WebDriver driver;
-
     @FindBy(xpath = "//input[@placeholder='Username']")
     private WebElement fieldUsername;
-
     @FindBy(xpath = "//input[@placeholder='Password']")
     private WebElement fieldPassword;
 
@@ -65,6 +62,7 @@ public class SociolaRotateImage {
     @FindBy(xpath = "//input[@name='uploadfile']")
     WebElement btnFileOneOpenCV;
 
+    /** kasih informasi minimal disini */
     @FindBy(xpath = "//input[@name='uploadfile2']")
     WebElement btnFileTwoOpenCV;
 
